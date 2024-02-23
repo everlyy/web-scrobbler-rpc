@@ -25,17 +25,23 @@ def update_rpc(r):
 		rpc.clear()
 		return
 
-	info = r["data"]["song"]["processed"]
-	metadata = r["data"]["song"]["metadata"]
+	song = r["data"]["song"]
+	info = song["processed"]
+	metadata = song["metadata"]
 
 	title = info["track"]
 	artist = info["artist"]
-	album = info["album"]
+	album = info.get("album")
 	start_time = int(metadata["startTimestamp"])
+	connector = (
+		song["connectorLabel"]
+		if "connectorLabel" in song else
+		song["connector"]["label"]
+	)
 	cover = (
 		metadata["trackArtUrl"]
 		if "trackArtUrl" in metadata else
-		r["data"]["song"]["parsed"]["trackArt"]
+		song["parsed"]["trackArt"]
 	)
 
 	print(f"Currently playing: {artist} - {title}")
@@ -46,6 +52,8 @@ def update_rpc(r):
 			state=f"by {artist}",
 			large_image=cover,
 			large_text=album,
+			small_image="ws",
+			small_text=connector,
 			start=start_time
 		)
 	except Exception as e:
@@ -73,4 +81,5 @@ if __name__ == "__main__":
 	except KeyboardInterrupt:
 		pass
 
+	rpc.close()
 	server.server_close()
