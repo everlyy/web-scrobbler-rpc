@@ -53,7 +53,7 @@ def update_rpc(r):
 			large_image=cover,
 			large_text=album,
 			small_image="ws",
-			small_text=connector,
+			small_text=f"Web Scrobbler - {connector}",
 			start=start_time
 		)
 	except Exception as e:
