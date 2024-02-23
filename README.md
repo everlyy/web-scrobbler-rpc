@@ -4,7 +4,8 @@ This is a small program to show your currently playing song as your Discord stat
 
 # Quick Start
 
-First you need to add a Webhook to your Web Scrobbler accounts:
+First you need to add a Webhook to your Web Scrobbler accounts,
+you can do that by allowing access [over here](https://web-scrobbler.com/webhook?applicationName=Everly's%20Discord%20RPC&userApiUrl=http://localhost:8080) or with these steps:
  1. Go to Web Scrobbler's settings
  2. Go to the 'Accounts' tab
  3. Scroll down to where it says 'Webhook'
