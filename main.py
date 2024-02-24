@@ -1,5 +1,4 @@
 import pypresence
-import json
 from config import *
 import flask
 
