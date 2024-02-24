@@ -1,11 +1,13 @@
 import pypresence
 import json
-from http.server import BaseHTTPRequestHandler, HTTPServer
 from config import *
+import flask
 
 rpc = pypresence.Presence(
 	client_id=DISCORD_CLIENT_ID
 )
+
+app = flask.Flask(__name__)
 
 def rpc_try_connect():
 	try:
@@ -60,26 +62,10 @@ def update_rpc(r):
 		print(f"Couldn't update RPC: {e}")
 		rpc_try_connect()
 
-class WebScrobblerWebhookServer(BaseHTTPRequestHandler):
-	def do_POST(self):
-		r = json.loads(
-			self.rfile.read(
-				int(self.headers["Content-Length"])
-			)
-		)
-		self.send_response(200)
+@app.route("/", methods=[ "POST" ])
+def index():
+	if flask.request.method == "POST" and not flask.request.is_json:
+		return flask.make_response("method POST requires JSON body", 400)
 
-		update_rpc(r)
-
-if __name__ == "__main__":
-	rpc_try_connect()
-	server = HTTPServer((ADDRESS, PORT), WebScrobblerWebhookServer)
-	print(f"HTTP server started on {ADDRESS}:{PORT}")
-
-	try:
-		server.serve_forever()
-	except KeyboardInterrupt:
-		pass
-
-	rpc.close()
-	server.server_close()
+	update_rpc(flask.request.json)
+	return flask.make_response("OK")
