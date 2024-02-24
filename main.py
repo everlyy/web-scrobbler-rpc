@@ -68,3 +68,10 @@ def index():
 
 	update_rpc(flask.request.json)
 	return flask.make_response("OK")
+
+if __name__ == "__main__":
+	app.run(
+		debug=False,
+		host=ADDRESS,
+		port=PORT
+	)
