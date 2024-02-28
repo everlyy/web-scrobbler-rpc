@@ -1,73 +1,82 @@
 import pypresence
+from werkzeug.datastructures import auth
 from config import *
 import flask
+import dataclasses
+import urllib.parse
+import StateHandler
+from typing import Callable
+import asyncio
 
-rpc = pypresence.Presence(
-	client_id=DISCORD_CLIENT_ID
+app = flask.Flask(
+	__name__,
+	static_url_path="",
+	static_folder="web/static",
+	template_folder="web/templates"
 )
 
-app = flask.Flask(__name__)
+rpc = pypresence.Presence(
+	client_id=DISCORD_CLIENT_ID,
+	loop=asyncio.get_event_loop()
+)
 
-def rpc_try_connect():
-	try:
-		rpc.connect()
-		print(f"Connected to Discord RPC")
-	except Exception as e:
-		print(f"Couldn't connect to Discord RPC: {e}")
+state = StateHandler.State()
 
-def update_rpc(r):
-	evt = r["eventName"]
-	playing = evt in ("nowplaying", "resumedplaying", "scrobble")
+@state.state_changed
+def state_changed(state: StateHandler.State):
+	def rpc_try(func: Callable, *args, **kwargs):
+		try:
+			func(*args, **kwargs)
+		except Exception as e:
+			print(f"RPC {func.__name__} failed: {e}")
+			rpc.connect()
 
-	print(f"Received event: {repr(evt)} {playing=}")
-
-	if not playing:
-		print(f"Nothing seems to be playing, clearing RPC")
-		rpc.clear()
+	track: (StateHandler.Track | None) = state.now_playing
+	if track is None:
+		rpc_try(rpc.clear)
 		return
 
-	song = r["data"]["song"]
-	info = song["processed"]
-	metadata = song["metadata"]
-
-	title = info["track"]
-	artist = info["artist"]
-	album = info.get("album")
-	start_time = int(metadata["startTimestamp"])
-	connector = (
-		song["connectorLabel"]
-		if "connectorLabel" in song else
-		song["connector"]["label"]
-	)
-	cover = (
-		metadata["trackArtUrl"]
-		if "trackArtUrl" in metadata else
-		song["parsed"]["trackArt"]
+	rpc_try(
+		rpc.update,
+		details=track.title,
+		state=f"by {track.artist}",
+		large_image=track.cover,
+		large_text=track.album,
+		small_image="ws",
+		small_text=f"{track.connector} connector",
+		start=track.start_time
 	)
 
-	print(f"Currently playing: {artist} - {title}")
+def generate_auth_url() -> str:
+	event_endpoint = flask.url_for("event")
+	webhook_url = f"http://{ADDRESS}:{PORT}{event_endpoint}"
+	
+	params = {
+		"applicationName": APP_NAME,
+		"userApiUrl": webhook_url
+	}
+	auth_url = "https://web-scrobbler.com/webhook?" + urllib.parse.urlencode(params)
+	return auth_url
 
-	try:
-		rpc.update(
-			details=title,
-			state=f"by {artist}",
-			large_image=cover,
-			large_text=album,
-			small_image="ws",
-			small_text=f"Web Scrobbler - {connector}",
-			start=start_time
-		)
-	except Exception as e:
-		print(f"Couldn't update RPC: {e}")
-		rpc_try_connect()
+@app.route("/event", methods=[ "POST" ])
+def event():
+	if not flask.request.is_json:
+		return flask.make_response("No JSON body", 400)
 
-@app.route("/", methods=[ "POST" ])
-def index():
-	if flask.request.method == "POST" and not flask.request.is_json:
-		return flask.make_response("method POST requires JSON body", 400)
-
-	update_rpc(flask.request.json)
+	state.handle_event(flask.request.json)
 	return flask.make_response("OK")
+
+@app.route("/", methods=[ "GET" ])
+def index():
+	return flask.render_template("index.j2")
+
+@app.route("/now-playing", methods=[ "GET" ])
+def now_playing_ui():
+	return flask.render_template(
+		"now-playing.j2",
+		track=state.now_playing,
+		auth_url=generate_auth_url()
+	)
 
 if __name__ == "__main__":
 	app.run(

@@ -1,0 +1,14 @@
+{% if track == None %}
+	<h1>Nothing seems to be playing right now</h1>
+	<p>Did you authenticate the <a href="{{ auth_url }}">Webhook URL</a>?</p>
+{% else %}
+	<h1>{{ track.title }}</h1>
+	<p>by {{ track.artist }}</p>
+	{% if track.album != None %}
+		<p>on {{ track.album }}</p>
+	{% endif %}
+
+	{% if track.cover != None %}
+		<img src="{{ track.cover }}">
+	{% endif %}
+{% endif %}
