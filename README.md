@@ -15,7 +15,7 @@ you can do that by allowing access [over here](https://web-scrobbler.com/webhook
 Then you need to start the webhook server. Make sure you have python3 and pip installed.
 Then you can install the required packages like this:
 ```console
-$ pip install pypresence flask
+$ pip install flask
 ```
 
 Then you can run `main.py` with python

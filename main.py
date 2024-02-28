@@ -1,4 +1,3 @@
-import pypresence
 from werkzeug.datastructures import auth
 from config import *
 import flask
@@ -15,37 +14,16 @@ app = flask.Flask(
 	template_folder="web/templates"
 )
 
-rpc = pypresence.Presence(
-	client_id=DISCORD_CLIENT_ID,
-	loop=asyncio.get_event_loop()
-)
-
 state = StateHandler.State()
 
 @state.state_changed
 def state_changed(state: StateHandler.State):
-	def rpc_try(func: Callable, *args, **kwargs):
-		try:
-			func(*args, **kwargs)
-		except Exception as e:
-			print(f"RPC {func.__name__} failed: {e}")
-			rpc.connect()
-
 	track: (StateHandler.Track | None) = state.now_playing
 	if track is None:
-		rpc_try(rpc.clear)
+		# Clear RPC
 		return
 
-	rpc_try(
-		rpc.update,
-		details=track.title,
-		state=f"by {track.artist}",
-		large_image=track.cover,
-		large_text=track.album,
-		small_image="ws",
-		small_text=f"{track.connector} connector",
-		start=track.start_time
-	)
+	# Set RPC
 
 def generate_auth_url() -> str:
 	event_endpoint = flask.url_for("event")
