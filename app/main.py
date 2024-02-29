@@ -74,8 +74,6 @@ def state_changed(state: StateHandler.State):
 	if track.album is not None:
 		rpc_state["assets"]["large_text"] = track.album
 
-	print(rpc_state)
-
 	rpc.set(rpc_state)
 
 def generate_auth_url() -> str:
