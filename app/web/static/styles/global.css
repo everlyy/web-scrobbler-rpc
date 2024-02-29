@@ -21,7 +21,7 @@ header {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
-    filter: blur(2em);
+    filter: blur(2em) brightness(75%);
 }
 
 header {
