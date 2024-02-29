@@ -22,3 +22,11 @@ If you open the site in your browser you'll be prompted to authenticate the Webh
 
 Big thanks to [Web Scrobbler](https://web-scrobbler.com/) for making such an awesome extension!
 They also have a upcoming official RPC, I will link this here whenever it's public.
+
+# Screenshots
+
+### Discord Profile
+![Discord Profile](screenshots/discord.png)
+
+### Web Interface
+![Web Interface](screenshots/web-ui.png)
