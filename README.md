@@ -17,3 +17,8 @@ $ python3 app/main.py
 ```
 
 If you open the site in your browser you'll be prompted to authenticate the Webhook URL, do this and you should be good to go.
+
+# Thanks
+
+Big thanks to [Web Scrobbler](https://web-scrobbler.com/) for making such an awesome extension!
+They also have a upcoming official RPC, I will link this here whenever it's public.
