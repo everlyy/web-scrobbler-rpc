@@ -44,7 +44,7 @@ class State:
 	def handle_event(self, event):
 		event_name = event["eventName"]
 		is_something_playing = event_name in ("nowplaying", "resumedplaying", "scrobble")
-		
+
 		self.now_playing = (
 			None
 			if not is_something_playing else

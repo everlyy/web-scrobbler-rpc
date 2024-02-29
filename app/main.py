@@ -35,7 +35,7 @@ def state_changed(state: StateHandler.State):
 
 	if track.cover is not None:
 		rpc_state["assets"]["large_image"] = track.cover
-	
+
 	if track.album is not None:
 		rpc_state["assets"]["large_text"] = track.album
 
@@ -44,7 +44,7 @@ def state_changed(state: StateHandler.State):
 def generate_auth_url() -> str:
 	event_endpoint = flask.url_for("event")
 	webhook_url = f"http://{flask.request.host}{event_endpoint}"
-	
+
 	params = {
 		"applicationName": APP_NAME,
 		"userApiUrl": webhook_url
