@@ -1,12 +1,8 @@
-from werkzeug.datastructures import auth
 from config import *
-import flask
-import dataclasses
-import urllib.parse
-import StateHandler
-from typing import Callable
-import asyncio
 import discordrp
+import flask
+import StateHandler
+import urllib.parse
 
 app = flask.Flask(
 	__name__,
