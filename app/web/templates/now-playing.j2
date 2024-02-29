@@ -1,24 +1,24 @@
 {% if track == None %}
-	<div class="nothing-playing">
-		<h2>Nothing seems to be playing right now</h2>
-		<p>Did you authenticate the <a href="{{ auth_url }}">Webhook URL</a>?</p>
-	</div>
+    <div class="nothing-playing">
+        <h2>Nothing seems to be playing right now</h2>
+        <p>Did you authenticate the <a href="{{ auth_url }}">Webhook URL</a>?</p>
+    </div>
 {% else %}
-	<div class="track">
-		<div class="cover">
-			{% if track.cover != None %}
-				<img src="{{ track.cover }}">
-			{% endif %}
-		</div>
+    <div class="track">
+        <div class="cover">
+            {% if track.cover != None %}
+                <img src="{{ track.cover }}">
+            {% endif %}
+        </div>
 
-		<div class="info">
-			<!-- TODO: Make the title end in '...' if it's too long to display nicely -->
-			<h2 class="title">{{ track.title }}</h2>
-			<p class="artist">by <b>{{ track.artist }}</b></p>
+        <div class="info">
+            <!-- TODO: Make the title end in '...' if it's too long to display nicely -->
+            <h2 class="title">{{ track.title }}</h2>
+            <p class="artist">by <b>{{ track.artist }}</b></p>
 
-			{% if track.album != None %}
-				<p class="album">on <b>{{ track.album }}</b></p>
-			{% endif %}
-		</div>
-	</div>
+            {% if track.album != None %}
+                <p class="album">on <b>{{ track.album }}</b></p>
+            {% endif %}
+        </div>
+    </div>
 {% endif %}
