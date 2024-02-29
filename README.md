@@ -13,9 +13,9 @@ you can do that by allowing access [over here](https://web-scrobbler.com/webhook
  6. API URL should be what you set up in `config.py`, if you didn't change this it's `http://localhost:8080`
 
 Then you need to start the webhook server. Make sure you have python3 and pip installed.
-Then you can install the `pypresence` pip package like this:
+Then you can install the required packages like this:
 ```console
-$ pip install pypresence
+$ pip install discord-rich-presence flask
 ```
 
 Then you can run `main.py` with python

@@ -1,0 +1,23 @@
+header {
+	text-align: center;
+}
+
+#NowPlaying .track {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#NowPlaying .nothing-playing {
+	text-align: center;
+}
+
+#NowPlaying .track .cover img {
+	height: 8em;
+	margin: 1em;
+	border-radius: 1em;
+}
+
+#NowPlaying .track .info p {
+	margin: 0;
+}
