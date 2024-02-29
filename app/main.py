@@ -80,7 +80,7 @@ def state_changed(state: StateHandler.State):
 
 def generate_auth_url() -> str:
 	event_endpoint = flask.url_for("event")
-	webhook_url = f"http://{ADDRESS}:{PORT}{event_endpoint}"
+	webhook_url = f"http://{flask.request.host}{event_endpoint}"
 	
 	params = {
 		"applicationName": APP_NAME,
