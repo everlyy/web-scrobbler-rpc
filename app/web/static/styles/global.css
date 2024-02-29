@@ -9,7 +9,6 @@ header {
 
 .has-cover {
     background-image: var(--cover-image-url) !important;
-    filter: blur(2em);
 }
 
 #Background {
@@ -22,6 +21,7 @@ header {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    filter: blur(2em);
 }
 
 header {
