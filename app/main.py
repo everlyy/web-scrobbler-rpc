@@ -67,16 +67,12 @@ def index():
 @app.route("/now-playing", methods=[ "GET" ])
 def now_playing_ui():
     return flask.jsonify(
+        state=state.now_playing,
         document=flask.render_template(
             "now-playing.j2",
             track=state.now_playing,
             auth_url=generate_auth_url()
         ),
-        cover=(
-            state.now_playing.cover
-            if state.now_playing is not None else
-            None
-        )
     )
 
 if __name__ == "__main__":
