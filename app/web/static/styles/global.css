@@ -39,7 +39,7 @@ header {
 }
 
 #NowPlaying .track .cover img {
-    height: 8em;
+    height: 10em;
     margin: 1em;
     border-radius: 1em;
 }
