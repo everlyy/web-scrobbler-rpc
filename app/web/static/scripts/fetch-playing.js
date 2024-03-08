@@ -1,4 +1,5 @@
 const fetch_interval = 2500;
+let start_time = 0;
 
 let fetch_playing = () => {
     fetch("/now-playing").then((response) => response.json()).then((json) => {
@@ -9,6 +10,9 @@ let fetch_playing = () => {
             "Web Scrobbler RPC"
         );
 
+        start_time = json.state.start_time ?? 0;
+        update_elapsed();
+
         if(json.state && json.state.cover) {
             Background.style.setProperty("--cover-image-url", `url("${json.state.cover}")`);
             Background.classList.add("has-cover");
@@ -18,7 +22,16 @@ let fetch_playing = () => {
     });
 };
 
+let update_elapsed = (timestamp) => {
+    let seconds = Math.floor((Date.now() / 1000) - start_time);
+    let minutes = Math.floor(seconds / 60);
+    seconds = seconds % 60;
+
+    Elapsed.innerHTML = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+};
+
 (() => {
     fetch_playing();
     setInterval(fetch_playing, fetch_interval);
+    setInterval(update_elapsed, 500);
 })();
