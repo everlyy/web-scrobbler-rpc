@@ -13,7 +13,7 @@ class RPCWrapper:
                 print(f"Couldn't connect to Discord RPC: {e}")
                 self._rpc = None
 
-    def _is_connected(self):
+    def _is_connected(self) -> bool:
         if self._rpc is None:
             self._connect()
 

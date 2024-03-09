@@ -15,7 +15,7 @@ class State:
         self.now_playing: (Track | None) = None
         self._state_changed_handlers: list[Callable] = []
 
-    def _parse_track_from_event(self, event: dict):
+    def _parse_track_from_event(self, event: dict) -> Track:
         song = event["data"]["song"]
         info = song["processed"]
         metadata = song["metadata"]
@@ -41,7 +41,7 @@ class State:
             cover=cover
         )
 
-    def handle_event(self, event):
+    def handle_event(self, event: dict):
         event_name = event["eventName"]
         is_something_playing = event_name in ("nowplaying", "resumedplaying", "scrobble")
 
@@ -54,5 +54,5 @@ class State:
         for handler in self._state_changed_handlers:
             handler(self)
 
-    def state_changed(self, func):
+    def state_changed(self, func: Callable):
         self._state_changed_handlers.append(func)
