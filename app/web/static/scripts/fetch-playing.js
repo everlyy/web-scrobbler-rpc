@@ -16,13 +16,14 @@ let update_favicon = (icon) => {
 let fetch_playing = () => {
     fetch("/now-playing").then((response) => response.json()).then((json) => {
         NowPlaying.innerHTML = json.document;
+
         document.title = (
             json.state ?
             `${json.state.artist} - ${json.state.title} | Web Scrobbler RPC` :
             "Web Scrobbler RPC"
         );
 
-        start_time = json.state.start_time ?? 0;
+        start_time = json.state ? json.state.start_time : 0;
         update_elapsed();
 
         if(json.state && json.state.cover) {
@@ -36,6 +37,9 @@ let fetch_playing = () => {
 };
 
 let update_elapsed = (timestamp) => {
+    if(!("Elapsed" in window))
+        return;
+
     let seconds = Math.floor((Date.now() / 1000) - start_time);
     let minutes = Math.floor(seconds / 60);
     seconds = seconds % 60;
