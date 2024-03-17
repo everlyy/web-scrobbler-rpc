@@ -1,6 +1,18 @@
 const fetch_interval = 2500;
 let start_time = 0;
 
+let update_favicon = (icon) => {
+    let link = document.querySelector("link[rel='icon']");
+
+    if (!link) {
+        link = document.createElement("link");
+        link.setAttribute("rel", "icon");
+        document.head.appendChild(link);
+    }
+
+    link.href = icon;
+};
+
 let fetch_playing = () => {
     fetch("/now-playing").then((response) => response.json()).then((json) => {
         NowPlaying.innerHTML = json.document;
@@ -14,6 +26,7 @@ let fetch_playing = () => {
         update_elapsed();
 
         if(json.state && json.state.cover) {
+            update_favicon(json.state.cover);
             Background.style.setProperty("--cover-image-url", `url("${json.state.cover}")`);
             Background.classList.add("has-cover");
         } else {
